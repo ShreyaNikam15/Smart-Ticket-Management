@@ -16,7 +16,7 @@ function generateQRCode(data) {
 }
 
 // Input value for hashing
-const input = 'Some data to hash';
+const input = 'shrey shah - 3 - 4 - 7';
 const hashedValue = generateHash(input);
 console.log(`Hashed Value: ${hashedValue}`);
 
