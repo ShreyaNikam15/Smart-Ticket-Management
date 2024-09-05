@@ -1,6 +1,6 @@
 import sendMail from "../middlewares/sendMail.js";
 import { otpS } from "../models/OTP.js";
-import { User } from "../models/User.js";
+import  User  from "../models/User.js";
 import jwt from "jsonwebtoken";
 import sendSMS from "../middlewares/sendSMS.js";
 

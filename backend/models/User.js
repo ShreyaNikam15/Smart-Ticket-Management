@@ -1,30 +1,30 @@
+// models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
         name: {
-        type: String,
+            type: String,
         },
-    
         phoneNo: {
-        type: String,
-        required: true,
-        unique: true,
-        // validate: {
-        //     validator: function (value) {
-        //     return /^\d{10}/.test(value);
-        //     },
-        //     message: "Phone number must be 10 digits long",
-        // },
+            type: String,
+            required: true,
+            unique: true,
         },
-    
         isVerified: {
-        type: Boolean,
-        default: false,
+            type: Boolean,
+            default: false,
+        },
+        image: {
+            type: String,  // Store the URL or path of the uploaded image
         },
     },
     {
         timestamps: true,
     }
 );
-export const User = mongoose.model("User", userSchema);
+
+const User = mongoose.model("User", userSchema);
+
+// Use export default for ESM
+export default User;
