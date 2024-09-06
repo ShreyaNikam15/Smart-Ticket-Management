@@ -24,12 +24,20 @@ const Chat = () => {
     if (!newMessage.trim()) return;
 
     try {
-      const response = await axios.post('https://smart-ticket-management.onrender.com/api/chat', { userInput: newMessage });
+      // Updated the API URL and request body
+      const response = await axios.post('https://automated-museum-ticketing-system.onrender.com/api/chat', {
+        prompt: newMessage,
+        language: 'en',
+      });
+
       const newChat = {
         currQuery: newMessage,
         response: response.data.response,
+        stage: response.data.stage,  // Save the stage if needed
+        stageResponse: response.data.stage_response,  // Save the stage response if needed
         createdAt: new Date(),
       };
+
       setMessages([...messages, newChat]);
       setNewMessage('');
     } catch (error) {
@@ -122,6 +130,7 @@ const Chat = () => {
                 </div>
                 <div style={styles.aiMessageContent}>
                   <strong>Response:</strong> {message.response}
+                  {message.stage && <p><strong>Stage Response:</strong> {message.stageResponse}</p>}
                 </div>
                 <span style={styles.timestamp}>
                   {new Date(message.createdAt).toLocaleString()}
