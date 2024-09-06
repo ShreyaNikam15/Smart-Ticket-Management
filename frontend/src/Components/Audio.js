@@ -13,6 +13,7 @@ const Audio = () => {
   const [transcript, setTranscript] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [feedbackText, setFeedbackText] = useState('');
+  const [showTranscript, setShowTranscript] = useState(false); // State to manage transcript animation
 
   const chatHistoryRef = useRef(null);
 
@@ -52,6 +53,7 @@ const Audio = () => {
   };
 
   const handleGenerateTranscript = () => {
+    setShowTranscript(true);
     setTranscript('Generated transcript of the audio will be displayed here...');
   };
 
@@ -73,38 +75,39 @@ const Audio = () => {
 
       {/* Tags with Dropdowns */}
       <div style={styles.tags}>
-        <div style={styles.tagWrapper}>
-          <button style={styles.tagButton} onClick={() => toggleDropdown('museum')}>Museum</button>
-          {dropdowns.museum && (
-            <div style={styles.dropdownContent}>
-              <p>Museum History</p>
-              <p>Visitor Guidelines</p>
-              <p>Opening Hours</p>
-            </div>
-          )}
-        </div>
-
-        <div style={styles.tagWrapper}>
-          <button style={styles.tagButton} onClick={() => toggleDropdown('collections')}>Collections</button>
-          {dropdowns.collections && (
-            <div style={styles.dropdownContent}>
-              <p>Modern Art</p>
-              <p>Historical Artifacts</p>
-              <p>Contemporary Sculptures</p>
-            </div>
-          )}
-        </div>
-
-        <div style={styles.tagWrapper}>
-          <button style={styles.tagButton} onClick={() => toggleDropdown('events')}>Events</button>
-          {dropdowns.events && (
-            <div style={styles.dropdownContent}>
-              <p>Art Workshops</p>
-              <p>Guided Tours</p>
-              <p>Special Exhibits</p>
-            </div>
-          )}
-        </div>
+        {['museum', 'collections', 'events'].map((item) => (
+          <div style={styles.tagWrapper} key={item}>
+            <button style={styles.tagButton} onClick={() => toggleDropdown(item)}>
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </button>
+            {dropdowns[item] && (
+              <div style={styles.dropdownContent}>
+                {/* Content dynamically rendered for simplicity */}
+                {item === 'museum' && (
+                  <>
+                    <p>Museum History</p>
+                    <p>Visitor Guidelines</p>
+                    <p>Opening Hours</p>
+                  </>
+                )}
+                {item === 'collections' && (
+                  <>
+                    <p>Modern Art</p>
+                    <p>Historical Artifacts</p>
+                    <p>Contemporary Sculptures</p>
+                  </>
+                )}
+                {item === 'events' && (
+                  <>
+                    <p>Art Workshops</p>
+                    <p>Guided Tours</p>
+                    <p>Special Exhibits</p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       <div style={styles.contentWrapper}>
@@ -155,7 +158,9 @@ const Audio = () => {
             <button onClick={handleGenerateTranscript} style={styles.transcriptButton}>
               Generate Transcript
             </button>
-            {transcript && <p style={styles.transcriptText}>{transcript}</p>}
+            {showTranscript && (
+              <p style={{ ...styles.transcriptText, animation: 'fadeIn 1s' }}>{transcript}</p>
+            )}
           </div>
 
           {/* Feedback Section */}
@@ -207,20 +212,16 @@ const Audio = () => {
 };
 
 const styles = {
-  /* Same styles as provided earlier with additional styles for new components */
   chatContainer: {
     display: 'flex',
     justifyContent: 'center',
-    maxWidth: '500px',
+    maxWidth: '500px', // Increased for wider view
     margin: '0 auto',
     flexDirection: 'column',
     height: '100vh',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
     fontFamily: '"Playfair Display", serif',
-    ...(window.innerWidth <= 768 && {
-      maxWidth: '100%',
-      margin: '0',
-    }),
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   navbar: {
     display: 'flex',
@@ -258,7 +259,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     padding: '10px 0',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#ffffff',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   },
   tagWrapper: {
     position: 'relative',
@@ -266,64 +268,47 @@ const styles = {
   },
   tagButton: {
     backgroundColor: '#2c3e50',
-    border: 'none',
     color: '#ecf0f1',
-    padding: '8px 16px',
-    borderRadius: '20px',
+    border: 'none',
+    padding: '5px 15px',
+    borderRadius: '5px',
     cursor: 'pointer',
-    fontSize: '14px',
   },
   dropdownContent: {
     position: 'absolute',
     top: '100%',
-    left: 0,
+    left: '0',
     backgroundColor: '#ffffff',
-    border: '1px solid #ddd',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
     padding: '10px',
-    zIndex: 1,
-    minWidth: '150px',
-  },
-  contentWrapper: {
-    display: 'flex',
-    flex: 1,
-    overflow: 'hidden',
-    ...(window.innerWidth <= 768 && {
-      flexDirection: 'column',
-      padding: '0',
-    }),
+    borderRadius: '5px',
+    zIndex: 10,
+    width: '200px',
   },
   sidebar: {
-    width: '200px',
-    backgroundColor: '#34495e',
-    boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-    color: '#ecf0f1',
+    width: '250px',
+    height: '100%',
+    backgroundColor: '#2c3e50',
+    position: 'fixed',
+    left: 0,
+    top: 0,
     padding: '20px',
-    overflowY: 'auto',
-    height: 'calc(100vh - 60px)', // Subtracting navbar height
-    ...(window.innerWidth <= 768 && {
-      display: 'none', // Hide sidebar on mobile
-    }),
+    color: '#ecf0f1',
+    boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
   },
   closeButton: {
     backgroundColor: 'transparent',
     border: 'none',
     color: '#ecf0f1',
-    fontSize: '24px',
+    fontSize: '30px',
     cursor: 'pointer',
-    marginBottom: '20px',
   },
   sidebarHeader: {
-    color: '#ecf0f1',
-    fontSize: '20px',
-    marginBottom: '15px',
-    borderBottom: '1px solid #ecf0f1',
-    paddingBottom: '10px',
+    marginBottom: '20px',
   },
   sidebarList: {
-    listStyle: 'none',
-    padding: '0',
+    listStyleType: 'none',
+    padding: 0,
   },
   sidebarItem: {
     padding: '10px 0',
@@ -333,123 +318,136 @@ const styles = {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    overflow: 'hidden',
-    margin: '10px',
-    ...(window.innerWidth <= 768 && {
-      margin: '0',
-    }),
+    alignItems: 'center',
+    margin: '0 20px',
   },
   circularImageContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '10px 0',
-    backgroundColor: '#ecf0f1',
+    margin: '20px 0',
   },
   circularImage: {
-    width: '70px',
-    height: '70px',
+    width: '100px',
+    height: '100px',
     borderRadius: '50%',
     overflow: 'hidden',
-    border: '3px solid #2c3e50',
   },
   image: {
     width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+    height: 'auto',
   },
   chatHistory: {
     flex: 1,
     overflowY: 'auto',
-    padding: '20px',
+    padding: '10px',
+    width: '100%',
+    marginBottom: '20px',
+    backgroundColor: '#f7f9fa',
+    borderRadius: '5px',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   },
   chatMessage: {
     marginBottom: '15px',
+    padding: '10px',
+    backgroundColor: '#ffffff',
+    borderRadius: '5px',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   },
   userMessageContent: {
-    maxWidth: '75%',
-    padding: '10px',
-    borderRadius: '10px',
-    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-    backgroundColor: 'rgb(255 249 199)',
-    wordBreak: 'break-word',
     marginBottom: '5px',
   },
   aiMessageContent: {
-    maxWidth: '75%',
-    padding: '10px',
-    borderRadius: '10px',
-    backgroundColor: '#f1f0f0',
-    wordBreak: 'break-word',
-    marginBottom: '5px',
+    color: '#2c3e50',
   },
   timestamp: {
-    fontSize: '12px',
-    color: '#888',
-  },
-  form: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '20px',
-    borderTop: '1px solid #ddd',
-  },
-  input: {
-    flex: 1,
-    padding: '10px',
-    marginRight: '10px',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
-  },
-  button: {
-    padding: '10px 20px',
-    backgroundColor: 'rgb(236 126 5)',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
+    fontSize: '0.8em',
+    color: '#999',
   },
   audioPlayer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
+    marginBottom: '20px',
   },
   transcriptButton: {
     marginTop: '10px',
-    padding: '10px 20px',
+    padding: '5px 15px',
     backgroundColor: '#2c3e50',
     color: '#ecf0f1',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '5px',
     cursor: 'pointer',
   },
   transcriptText: {
     marginTop: '10px',
-    color: '#333',
+    backgroundColor: '#f7f9fa',
+    padding: '10px',
+    borderRadius: '5px',
   },
   feedbackSection: {
-    padding: '20px',
-    borderTop: '1px solid #ddd',
+    marginBottom: '20px',
+    padding: '10px',
+    backgroundColor: '#ffffff',
+    borderRadius: '5px',
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   },
   textArea: {
     width: '100%',
-    height: '80px',
+    height: '60px',
+    marginBottom: '10px',
     padding: '10px',
-    marginTop: '10px',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
   },
   submitButton: {
-    marginTop: '10px',
-    padding: '10px 20px',
-    backgroundColor: 'rgb(236 126 5)',
-    color: 'white',
+    padding: '5px 15px',
+    backgroundColor: '#2c3e50',
+    color: '#ecf0f1',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  form: {
+    display: 'flex',
+    width: '100%',
+  },
+  input: {
+    flex: 1,
+    padding: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    marginRight: '10px',
+  },
+  button: {
+    padding: '10px 20px',
+    backgroundColor: '#2c3e50',
+    color: '#ecf0f1',
+    border: 'none',
+    borderRadius: '5px',
     cursor: 'pointer',
   },
 };
+
+// Media queries for responsiveness
+const mediaStyles = `
+@media (max-width: 768px) {
+  .chatContainer {
+    max-width: 90%;
+  }
+  .sidebar {
+    width: 200px;
+  }
+  .chatHistory {
+    width: 100%;
+  }
+  .navbarTitle {
+    font-size: 14px;
+  }
+  .museumLogo {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+`;
 
 export default Audio;
