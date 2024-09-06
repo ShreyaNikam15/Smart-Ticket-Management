@@ -4,10 +4,7 @@ import { set, connect } from 'mongoose';
 set('strictQuery', true);
 
 const connectDB = (url) => {
-    return connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    return connect(url);
 };
 
 export default connectDB;
