@@ -168,7 +168,7 @@ const styles = {
     fontFamily: '"Playfair Display", serif',
     ...(window.innerWidth <= 768 && {
       maxWidth: '100%',
-      height: '80vh',
+      height: '90vh',
       margin: '0',
     }),
   },

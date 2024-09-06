@@ -2,18 +2,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./VerifyOTP.css"; // Import the CSS file
 
 const VerifyOTP = ({ verifyToken }) => {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
-  const navigate = useNavigate(); // Use navigate for redirection
+  const navigate = useNavigate();
 
   const handleVerify = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/verify",
+        "https://smart-ticket-management.onrender.com/api/user/verify",
         { otp },
         {
           headers: {
@@ -23,29 +24,31 @@ const VerifyOTP = ({ verifyToken }) => {
       );
       setMessage(response.data.message);
       setUser(response.data.user);
-      // Store the user token in local storage for authenticated routes
       localStorage.setItem("token", response.data.token);
-      navigate("/chat"); // Redirect to chat after successful verification
+      navigate("/chat");
     } catch (error) {
       setMessage(error.response?.data?.message || "Verification failed");
     }
   };
 
   return (
-    <div>
-      <h2>Verify OTP</h2>
-      <form onSubmit={handleVerify}>
+    <div className="verify-otp-container">
+      <h2 className="verify-otp-title">Verify OTP</h2>
+      <form onSubmit={handleVerify} className="verify-otp-form">
         <input
           type="text"
           placeholder="Enter OTP"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           required
+          className="verify-otp-input"
         />
-        <button type="submit">Verify OTP</button>
+        <button type="submit" className="verify-otp-button">
+          Verify OTP
+        </button>
       </form>
-      {message && <p>{message}</p>}
-      {user && <p>Welcome, {user.phoneNo}!</p>}
+      {message && <p className="verify-otp-message">{message}</p>}
+      {user && <p className="verify-otp-welcome">Welcome, {user.phoneNo}!</p>}
     </div>
   );
 };
