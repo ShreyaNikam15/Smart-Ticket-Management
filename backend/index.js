@@ -3,6 +3,12 @@ import dotenv from "dotenv";
 import connectDB from "./db/connect.js";
 import cors from "cors";
 // import chatRoutes from "./routes/chatRoutes.js"; // Import chat routes
+// const chatRoutes = require('./routes/chatRoute');
+// import chatRoutes from './routes/chatRoutes.js'
+// const chatRoutes = require('./routes/chatRoutes');
+import chatRoutes from './routes/chatRoutes.js'; // ES module import
+
+
 
 dotenv.config();
 
@@ -21,8 +27,9 @@ app.get("/api", (req, res) => {
 });
 app.use("/api/user", userRoutes);
 // app.use("/api/chat", chatRoutes);  // Add chat routes
+app.use('/api/chat', chatRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
