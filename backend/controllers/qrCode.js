@@ -39,7 +39,7 @@ async function createUserWithQRCode() {
         // Create a new user with the QR code image stored as binary data
         const newUser = new User({
             name: "Shrey Shah",
-            phoneNo: "1234567890",
+            phoneNo: "8978456512",
             isVerified: true,
             image: qrCodeBuffer.toString('base64'),  // Store the QR code as a base64 string
         });
