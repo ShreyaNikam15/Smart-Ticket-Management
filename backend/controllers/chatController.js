@@ -1,5 +1,9 @@
 import Groq from 'groq-sdk';
-const groq = new Groq({ apiKey: "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" });
+import dotenv from 'dotenv';
+// const dotenv = require('dotenv');
+// require('dotenv').config();
+dotenv.config();
+const groq = new Groq({ apiKey:process.env.GROQ_API_KEY  });
 
 const chatController = {
     chatWithGroq: async (req, res) => {
